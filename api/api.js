@@ -34,7 +34,7 @@ webhookRouter.post('/', async (req,res,next) => {
     }
   } else if (req.body.project.web_url == 'http://gitlab-systems.themill.com/puppet-ldn/puppet-general'){
     if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
-      const deploymentstatus = await deployEnvironment(req.body.ref,'/r10k-ldn.yaml')
+      const deploymentstatus = await deployEnvironment(req.body.ref,'/r10k-london.yaml')
     } else {
       console.log(`${req.body.ref} not in GITLAB_SYSTEMS_ALLOWED`)
     }
