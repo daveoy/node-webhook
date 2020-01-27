@@ -12,33 +12,29 @@ app.use(morgan());
 app.use(cors());
 app.use(bodyParser.json());
 
-const deployEnvironment = async (environment) => {
+const deployEnvironment = async (environment,config) => {
   const envname = environment.split("/").slice(-1)
   const cmd = `/usr/local/bin/r10k`
-  const args = ["-c","/r10k.yaml","deploy","environment",envname,"--puppetfile"]
+  const args = ["-c",config,"deploy","environment",envname,"--puppetfile"]
   console.log(cmd, args)
   let child = spawnSync(cmd, args)
-  console.log('deploy output:')
-  console.log(child.output.toString())
-  console.log('deploy error:')
-  console.log(child.error.toString())
-  let status = child.stdout.toString().trim()
-  return status
+  if (child.error){
+    console.log('deploy error:')
+    console.log(child.error.toString())
+  }
 }
 
 webhookRouter.post('/', async (req,res,next) => {
-  console.log(req.body)
+  console.log(`incoming update from ${req.body.user_name} to ${req.body.ref}`)
   if (req.body.project.web_url == 'http://gitlab.chi.themill.com/puppet/global'){
     if (GITLAB_CHI_ALLOWED.includes(req.body.ref)){
-      const deploymentstatus = await deployEnvironment(req.body.ref)
-      console.log(deploymentstatus)
+      const deploymentstatus = await deployEnvironment(req.body.ref,'/r10k-' + process.env.REACT_APP_MILL_SITE + '.yaml')
     } else {
       console.log(`${req.body.ref} not in GITLAB_CHI_ALLOWED`)
     }
   } else if (req.body.project.web_url == 'http://gitlab-systems.themill.com/puppet-ldn/puppet-general'){
     if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
-      const deploymentstatus = await deployEnvironment(req.body.ref)
-      console.log(deploymentstatus)
+      const deploymentstatus = await deployEnvironment(req.body.ref,'/r10k-ldn.yaml')
     } else {
       console.log(`${req.body.ref} not in GITLAB_SYSTEMS_ALLOWED`)
     }
