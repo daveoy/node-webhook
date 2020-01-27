@@ -2,7 +2,7 @@ stages:
   - build-receiver
 
 build-receiver:
-  stage: build-backend
+  stage: build-receiver
   image: docker:19.03.1
   variables:
     DOCKER_OPTS: "--insecure-registry=docker.themill.com"
