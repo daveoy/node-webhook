@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-recv
+  namespace: foreman-proxy
+spec:
+  selector:
+    matchLabels:
+      app: webhook-recv
+  replicas: 1
+  template:
+    metadata:
+      name: webhook-recv
+      labels:
+        app: webhook-recv
+      namespace: foreman-proxy
+    spec:
+        volumes:
+          - name: foreman-proxy-config
+            configMap:
+              name: foreman-proxy-config
+          - name: puppet-code
+            nfs:
+              server: 10.84.40.51
+              path: /ifs/sys/engineering/puppet-code/
+          - name: known-hosts
+            secret:
+              secretName: known-hosts
+              defaultMode: 420
+          - name: ssh-id
+            secret:
+              secretName: ssh-id
+              defaultMode: 384
+          - name: ssh-id-pub
+            secret:
+              secretName: ssh-id-pub
+              defaultMode: 420
+          - name: ssh-config
+            secret:
+              secretName: ssh-config
+              defaultMode: 420
+        containers:
+        - name: webhook-recv
+          image: docker.themill.com/webhook:latest1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+              name: webhook-recv
+          volumeMounts:
+            - mountPath: /root/.ssh/known_hosts
+              subPath: known-hosts
+              name: known-hosts
+            - mountPath: /root/.ssh/config
+              subPath: config
+              name: ssh-config
+            - mountPath: /root/.ssh/id_rsa.pub
+              subPath: id_rsa.pub
+              name: ssh-id-pub
+            - mountPath: /root/.ssh/id_rsa
+              subPath: id_rsa
+              name: ssh-id
+            - mountPath: /etc/hosts
+              subPath: etc-hosts-chi
+              name: foreman-proxy-config
+            - mountPath: /code
+              name: puppet-code
+            - mountPath: /r10k.yaml
+              subPath: r10k-config-chi
+              name: foreman-proxy-config

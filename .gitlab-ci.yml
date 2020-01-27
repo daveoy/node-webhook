@@ -1,0 +1,19 @@
+stages:
+  - build-receiver
+
+build-receiver:
+  stage: build-backend
+  image: docker:19.03.1
+  variables:
+    DOCKER_OPTS: "--insecure-registry=docker.themill.com"
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - name: docker:19.03.1-dind
+      command: ["--insecure-registry=docker.themill.com"]
+  before_script:
+    - docker login http://docker.themill.com -u docker -p docker
+  script:
+    - docker build -t $CI_COMMIT_SHORT_SHA .
+    - docker tag $CI_COMMIT_SHORT_SHA docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
+    - docker push docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
