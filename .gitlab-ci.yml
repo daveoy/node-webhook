@@ -17,3 +17,4 @@ build-receiver:
     - docker build -t $CI_COMMIT_SHORT_SHA .
     - docker tag $CI_COMMIT_SHORT_SHA docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
     - docker push docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
+#trigger
