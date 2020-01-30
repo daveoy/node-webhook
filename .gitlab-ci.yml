@@ -14,7 +14,7 @@ build-receiver:
   before_script:
     - docker login http://docker.themill.com -u docker -p docker
   script:
-    - docker build -t $CI_COMMIT_SHORT_SHA .
+    - docker build --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') -t $CI_COMMIT_SHORT_SHA .
     - docker tag $CI_COMMIT_SHORT_SHA docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
     - docker push docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
 #trigger
