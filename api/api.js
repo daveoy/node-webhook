@@ -16,6 +16,7 @@ const deployEnvironment = async (environment,config) => {
   const envname = environment.split("/").slice(-1)
   if (envname == 'master' && process.env.REACT_APP_MILL_SITE != 'ldn'){
     console.log('not deploying master since im not in london')
+    return true
   }
   const cmd = `/usr/local/bin/r10k`
   const args = ["-c",config,"deploy","environment",envname,"--puppetfile"]
