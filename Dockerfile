@@ -8,4 +8,4 @@ RUN gem install r10k
 WORKDIR /app
 COPY . /app
 RUN npm install
-CMD node api/api.js
+ENTRYPOINT exec /app/docker-entrypoint.sh
