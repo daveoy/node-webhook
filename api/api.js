@@ -19,7 +19,7 @@ const deployEnvironment = async (environment) => {
     return true
   }
   if (envname == 'millsite_local'){
-    envname = ''
+    envname = [' ']
   }
   const cmd = `/usr/local/bin/r10k`
   const args = ["-c","/r10k.yaml","deploy","environment",envname,"--puppetfile"]
