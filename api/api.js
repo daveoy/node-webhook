@@ -36,7 +36,7 @@ webhookRouter.post('/', async (req,res,next) => {
     } else {
       console.log(`${req.body.ref} not in GIT_ALLOWED`)
     }
-  } else if (req.body.project.web_url.includes('gitlab-systems.themill.com/puppet-ldn/'){
+  } else if (req.body.project.web_url.includes('gitlab-systems.themill.com/puppet-ldn/')){
     if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
       const deploymentstatus = await deployEnvironment(req.body.ref)
     } else {
