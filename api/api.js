@@ -19,7 +19,11 @@ const deployEnvironment = async (environment) => {
     return true
   }
   const cmd = `/usr/local/bin/r10k`
-  const args = ["-c","/r10k.yaml","deploy","environment",envname[0] === 'millsite_local' ? '--puppetfile' : envname[0] + " --puppetfile"]
+  const args = ["-c","/r10k.yaml","deploy","environment"]
+  if(envname[0] != 'millsite_local'){
+    args.push(envname[0])
+  }
+  args.push('--puppetfile')
   console.log(cmd, args)
   let child = spawnSync(cmd, args)
   if (child.error){
