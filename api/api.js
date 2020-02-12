@@ -6,7 +6,7 @@ const cors = require('cors');
 const { spawnSync } = require('child_process');
 const PORT = process.env.PORT || 4000
 const webhookRouter = express.Router();
-GITLAB_CHI_ALLOWED = ['refs/heads/mill3d_ws','refs/heads/mill3d_rb','refs/heads/mill2d_ws','refs/heads/mill2d_rb','refs/heads/millsite_local']
+GIT_ALLOWED = ['refs/heads/mill3d_ws','refs/heads/mill3d_rb','refs/heads/mill2d_ws','refs/heads/mill2d_rb','refs/heads/millsite_local']
 GITLAB_SYSTEMS_ALLOWED = ['refs/heads/windows','refs/heads/master','refs/heads/mill3d']
 app.use(morgan());
 app.use(cors());
@@ -30,11 +30,11 @@ const deployEnvironment = async (environment) => {
 
 webhookRouter.post('/', async (req,res,next) => {
   console.log(`incoming update from ${req.body.user_name} to ${req.body.ref}`)
-  if (req.body.project.web_url == 'http://gitlab.chi.themill.com/puppet/global'){
-    if (GITLAB_CHI_ALLOWED.includes(req.body.ref)){
+  if (req.body.project.web_url.includes('http://git.themill.com/puppet/')){
+    if (GIT_ALLOWED.includes(req.body.ref)){
       const deploymentstatus = await deployEnvironment(req.body.ref)
     } else {
-      console.log(`${req.body.ref} not in GITLAB_CHI_ALLOWED`)
+      console.log(`${req.body.ref} not in GIT_ALLOWED`)
     }
   } else if (req.body.project.web_url == 'http://gitlab-systems.themill.com/puppet-ldn/puppet-general'){
     if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
