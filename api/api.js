@@ -29,14 +29,14 @@ const deployEnvironment = async (environment) => {
 }
 
 webhookRouter.post('/', async (req,res,next) => {
-  console.log(`incoming update from ${req.body.user_name} to ${req.body.ref}`)
-  if (req.body.project.web_url.includes('http://git.themill.com/puppet/')){
+  console.log(`incoming update from ${req.body.project.web_url} by ${req.body.user_name} to ${req.body.ref}`)
+  if (req.body.project.web_url.includes('git.themill.com/puppet/')){
     if (GIT_ALLOWED.includes(req.body.ref)){
       const deploymentstatus = await deployEnvironment(req.body.ref)
     } else {
       console.log(`${req.body.ref} not in GIT_ALLOWED`)
     }
-  } else if (req.body.project.web_url == 'http://gitlab-systems.themill.com/puppet-ldn/puppet-general'){
+  } else if (req.body.project.web_url.includes('gitlab-systems.themill.com/puppet-ldn/'){
     if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
       const deploymentstatus = await deployEnvironment(req.body.ref)
     } else {
