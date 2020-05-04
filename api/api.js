@@ -6,22 +6,22 @@ const cors = require('cors');
 const { spawnSync } = require('child_process');
 const PORT = process.env.PORT || 4000
 const webhookRouter = express.Router();
-GIT_ALLOWED = ['refs/heads/mill3d_ws','refs/heads/mill3d_rb','refs/heads/mill2d_ws','refs/heads/mill2d_rb','refs/heads/millsite_local','refs/heads/mill3d']
+GIT_ALLOWED = ['refs/heads/global_classes','refs/heads/mill3d_ws','refs/heads/mill3d_rb','refs/heads/mill2d_ws','refs/heads/mill2d_rb','refs/heads/millsite_local','refs/heads/mill3d']
 GITLAB_SYSTEMS_ALLOWED = ['refs/heads/windows','refs/heads/master']
 app.use(morgan());
 app.use(cors());
 app.use(bodyParser.json());
 
 const deployEnvironment = async (environment) => {
-  const envname = environment.split("/").slice(-1)
+  const envname = environment.split("/").slice(-1)[0]
   if (envname == 'master' && process.env.REACT_APP_MILL_SITE != 'ldn'){
     console.log('not deploying master since im not in london')
     return true
   }
   const cmd = `/usr/local/bin/r10k`
   const args = ["-c","/r10k.yaml","deploy","environment"]
-  if(envname[0] != 'millsite_local'){
-    args.push(envname[0])
+  if(envname != 'millsite_local' || envname != 'global_classes'){
+    args.push(envname)
   }
   args.push('--puppetfile')
   console.log(cmd, args)
