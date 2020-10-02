@@ -6,8 +6,8 @@ const cors = require('cors');
 const { spawnSync } = require('child_process');
 const PORT = process.env.PORT || 4000
 const webhookRouter = express.Router();
-GIT_ALLOWED = ['refs/heads/windows','refs/heads/global_classes','refs/heads/millsite_local','refs/heads/mill3d','refs/heads/mill2d']
-GITLAB_SYSTEMS_ALLOWED = ['refs/heads/master']
+GIT_ALLOWED = ['refs/heads/windows','refs/heads/global_classes','refs/heads/millsite_local','refs/heads/mill3d','refs/heads/mill2d','refs/heads/servers']
+//GITLAB_SYSTEMS_ALLOWED = ['refs/heads/master']
 app.use(morgan());
 app.use(cors());
 app.use(bodyParser.json());
@@ -40,12 +40,12 @@ webhookRouter.post('/', async (req,res,next) => {
     } else {
       console.log(`${req.body.ref} not in GIT_ALLOWED`)
     }
-  } else if (req.body.project.web_url.includes('gitlab-systems.themill.com/puppet-ldn/')){
-    if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
-      const deploymentstatus = await deployEnvironment(req.body.ref)
-    } else {
-      console.log(`${req.body.ref} not in GITLAB_SYSTEMS_ALLOWED`)
-    }
+//  } else if (req.body.project.web_url.includes('gitlab-systems.themill.com/puppet-ldn/')){
+//    if (GITLAB_SYSTEMS_ALLOWED.includes(req.body.ref)){
+//      const deploymentstatus = await deployEnvironment(req.body.ref)
+//    } else {
+//      console.log(`${req.body.ref} not in GITLAB_SYSTEMS_ALLOWED`)
+//    }
   }
 	res.status(200).send({status:'ok'});
 });
