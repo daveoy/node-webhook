@@ -19,3 +19,4 @@ build-receiver:
     - docker tag docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA docker.themill.com/webhook:latest
     - docker push docker.themill.com/webhook:$CI_COMMIT_SHORT_SHA
     - docker push docker.themill.com/webhook:latest
+#
