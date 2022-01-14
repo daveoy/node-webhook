@@ -6,7 +6,7 @@ const cors = require('cors');
 const { spawnSync } = require('child_process');
 const PORT = process.env.PORT || 4000
 const webhookRouter = express.Router();
-GIT_ALLOWED = ['refs/heads/windows','refs/heads/global_classes','refs/heads/millsite_local','refs/heads/mill3d','refs/heads/mill2d','refs/heads/servers']
+GIT_ALLOWED = ['refs/heads/windows','refs/heads/global_classes','refs/heads/global_classes_tcs','refs/heads/tcs','refs/heads/millsite_local','refs/heads/mill3d','refs/heads/mill2d','refs/heads/servers']
 //GITLAB_SYSTEMS_ALLOWED = ['refs/heads/master']
 app.use(morgan());
 app.use(cors());
